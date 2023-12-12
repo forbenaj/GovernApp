@@ -71,12 +71,13 @@ class Status extends Program {
         let strikesContainer = document.createElement("div")
         strikesContainer.className = "strikesContainer"
 
-        let strikes = []
+        this.strikes = []
         for (i = 0; i < 5; i++) {
             let strike = document.createElement("div")
             strike.className = "strike"
+            strike.style.backgroundColor = "white"
             strikesContainer.appendChild(strike)
-            strikes.push(strike)
+            this.strikes.push(strike)
         }
 
         this.windowContent.appendChild(strikesContainer)

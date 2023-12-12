@@ -18,13 +18,13 @@ class Settings extends Program {
         // is bouncy?
         let isBouncyLabel = document.createElement("label");
 
-        this.isBouncyBtn = document.createElement("input");
-        this.isBouncyBtn.type = "checkbox";
-        this.isBouncyBtn.name = "isBouncySet";
-        this.isBouncyBtn.checked = settings.bouncy_dragging
+        this.isGameloop = document.createElement("input");
+        this.isGameloop.type = "checkbox";
+        this.isGameloop.name = "isBouncySet";
+        this.isGameloop.checked = settings.gameloop
 
-        let labelText = document.createTextNode("Enable Bouncy Dragging");
-        isBouncyLabel.appendChild(this.isBouncyBtn);
+        let labelText = document.createTextNode("Enable Gameloop");
+        isBouncyLabel.appendChild(this.isGameloop);
         isBouncyLabel.appendChild(labelText);
 
 
@@ -66,16 +66,16 @@ class Settings extends Program {
     }
 
     saveSettings() {
-        settings.bouncy_dragging = this.isBouncyBtn.checked
+        settings.gameloop = this.isGameloop.checked
         settings.bounce_factor = this.bounceSlider.value * 0.01
         settings.friction = (100 - this.frictionSlider.value) * 0.01
-        for (let program of runningPrograms) {
+        /*for (let program of runningPrograms) {
             if (typeof program.makeDraggable === 'function') {
                 program.makeDraggable()
             }
-        }
+        }*/
 
-        if (settings.bouncy_dragging) { startLoop() }
+        if (settings.gameloop) { startLoop() }
 
         else { stopLoop() }
     }

@@ -18,17 +18,30 @@ class GovernApp extends Program {
         // Create the window-content div element
 
         let titleContainer = document.createElement("div")
+        titleContainer.className = "appTitleContainer"
         titleContainer.style.textAlign = "center"
 
         let title = document.createElement("h1")
         title.innerHTML = "GovernApp"
 
+        this.notif = document.createElement("div")
+        if(this.currentLeyes.length > 0){
+          this.notif.className = "notif"
+        }
+        else{this.notif.className = "noNotif"}
+        this.notif.innerHTML = this.currentLeyes.length
+
+        titleContainer.appendChild(this.notif)
         titleContainer.appendChild(title)
+        
+        let description = document.createElement("p")
+        description.innerHTML = "Bienvenido al Sistema Único de Aprobación de Leyes y Estatutos! Por favor, revise las leyes pendientes sugeridas por los ciudadanos"
 
         this.leyesContainer = document.createElement("div")
         this.leyesContainer.className = "listContainer"
 
         this.windowContent.appendChild(titleContainer);
+        this.windowContent.appendChild(description);
         this.windowContent.appendChild(this.leyesContainer);
 
         this.window.style.top="10%";
@@ -48,9 +61,11 @@ class GovernApp extends Program {
     }
 
     appendLey() {
+      notifSound.play()
       console.log(leyes.length)
       if(leyes.length<=0){
-        leyes = leyesDefault
+        console.log("leyes var emptied")
+        leyes = leyesDefault.slice()
       }
         let randomLey = leyes[Math.floor(Math.random() * leyes.length)]
         let ley = new Ley(randomLey)
@@ -60,18 +75,34 @@ class GovernApp extends Program {
 
         ley.create(this.leyesContainer)
 
-        this.leyesContainer.scrollTop = this.leyesContainer.scrollHeight
+        //this.leyesContainer.scrollTop = this.leyesContainer.scrollHeight
         
         const index = leyes.indexOf(randomLey);
         if (index !== -1) {
             leyes.splice(index, 1);
         }
+        
+      this.updateNotif()
+
 
     }
 
-    openLey() {
-        console.log("ley opened")
+    resolveLey(ley){
+      const index = this.currentLeyes.indexOf(ley);
+      if (index !== -1) {
+        this.currentLeyes.splice(index, 1);
+      }
+      this.updateNotif()
+    }
 
+    updateNotif(){
+      this.notif.innerHTML = this.currentLeyes.length
+      if(this.currentLeyes.length > 0){
+        this.notif.className = "notif"
+      }
+      else{
+        this.notif.className = "noNotif"
+      }
     }
 }
 
@@ -83,6 +114,7 @@ class Ley {
         this.citizen = ley.citizen;
         this.tendency = ley.tendency;
         this.focused = false;
+        this.debated = false;
     }
 
     create(leyesContainer) {
@@ -146,6 +178,15 @@ class Ley {
 
         this.$jLey = $(this.leyContainer);
 
+        
+        this.progressBar = document.createElement("progress")
+        this.progressBar.max = "100"
+        this.progressBar.value = "0"
+        this.progressBar.textContent = this.title;
+
+        this.debatingLeyContainter = document.createElement("div")
+        this.debatingLeyContainter.style.backgroundColor="white"
+
     }
 
     append() {
@@ -168,13 +209,17 @@ class Ley {
     approveLey() {
         console.log("Approved!")
         this.$jLey.remove()
-        programInstances["Chamber"].addLey(this.ley)
+
+        programInstances["GovernApp"].resolveLey(this)
+
+        programInstances["Chamber"].addLey(this)
     }
 
     discardLey() {
         console.log("Discarded!")
         this.$jLey.remove()
 
+        programInstances["GovernApp"].resolveLey(this)
     }
 
 }
@@ -260,6 +305,6 @@ let leyesDefault = [
     }
   ]
 
-let leyes = leyesDefault
+let leyes = leyesDefault.slice()
 
 programInstances["GovernApp"] = new GovernApp()

@@ -1,7 +1,7 @@
 var programList = [
-    //"GovernApp",
-    //"Chamber",
-    //"Status",
+    "GovernApp",
+    "Chamber",
+    "Status",
     "Console",
     "Calculator",
     "Notepad",
@@ -16,9 +16,9 @@ var programInstances = {}
 function initialize() {
     for (let programName of programList) {
 
-        let script = document.createElement("script")
+        /*let script = document.createElement("script")
         script.src = "program-files/" + programName + ".js"
-        document.body.appendChild(script)
+        document.body.appendChild(script)*/
 
 
         let desktop = document.getElementById("Desktop")
@@ -103,12 +103,7 @@ class Program {
             runningPrograms.push(this)
             this.createWindow()
         }
-        if (this.window.style.visibility == "visible") {
-            console.log("Program already visible!")
-        }
-        else {
-            this.window.style.visibility = "visible"
-        }
+        this.window.style.visibility = "visible"
     }
 
     createWindow() {
@@ -180,7 +175,7 @@ class Program {
         this.$jWindow = $(this.window);
 
         // Window resize
-        this.$jWindow.resizable({ handles: "all", alsoresize: ".window-content" });
+        //this.$jWindow.resizable({ handles: "all", alsoresize: ".window-content" });
 
         // Window close
         this.$jWindow.on("click", ".close:first", () => {
@@ -220,11 +215,11 @@ class Program {
         this.speedY = 0;
 
         // Remove custom dragging logic if it was previously added
-        this.windowTop.removeEventListener("mousedown", this.mousedownHandler);
+        /*this.windowTop.removeEventListener("mousedown", this.mousedownHandler);
         document.removeEventListener("mousemove", this.mousemoveHandler);
-        document.removeEventListener("mouseup", this.mouseupHandler);
+        document.removeEventListener("mouseup", this.mouseupHandler);*/
 
-        if (settings.bouncy_dragging) {
+        //if (settings.gameloop) {
 
 
             if (this.$jWindow.hasClass("ui-draggable")) {
@@ -275,12 +270,12 @@ class Program {
             this.x = parseInt(this.window.style.left)
             this.y = parseInt(this.window.style.top)
 
-        }
-        else {
+        //}
+        /*else {
 
             this.$jWindow.draggable({ handle: "div.window-top", containment: "window" });
 
-        }
+        }*/
 
     }
 
@@ -357,9 +352,13 @@ var animRunning = false
 
 var tickCounter = 0;
 
+var randomTick = 150+(Math.random()*800)
+
+const notifSound = new Audio("assets/notification.mp3")
+
 function mainLoop() {
 
-    if (settings.bouncy_dragging) {
+    if (settings.gameloop) {
         for (let program of runningPrograms) {
             if (typeof program.update === 'function') {
                 program.update()
@@ -369,10 +368,14 @@ function mainLoop() {
 
     tickCounter++
 
-    if(tickCounter>300){
+    if(tickCounter>randomTick){
         console.log("tick")
         tickCounter = 0
-        programInstances["GovernApp"].appendLey()
+        randomTick = 60+(Math.random()*500)
+        if(programInstances["GovernApp"].currentLeyes.length < 8){
+            programInstances["GovernApp"].appendLey()
+            //programInstances["Chamber"].debateLey()
+        }
     }
 
     if (animRunning) { requestAnimationFrame(mainLoop); }
@@ -392,7 +395,7 @@ function stopLoop() {
 
 
 var settings = {
-    bouncy_dragging: true,
+    gameloop: true,
     friction: 0.98,
     bounce_factor: 0.7
 }

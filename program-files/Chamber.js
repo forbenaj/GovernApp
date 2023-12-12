@@ -82,22 +82,45 @@ class Chamber extends Program {
     }
 
     addLey(ley) {
-        let debatingLeyContainter = document.createElement("div")
-        debatingLeyContainter.className = "debatingLeyContainer"
+        ley.debatingLeyContainter.className = "debatingLeyContainer"
 
         let title = document.createElement("p")
         title.innerHTML = ley.title
 
-        debatingLeyContainter.appendChild(title)
+        ley.debatingLeyContainter.appendChild(title)
 
-        let progressBar = document.createElement("progress")
-        progressBar.max = "100"
-        progressBar.value = "70"
-        progressBar.textContent = ley.title;
+        
+        //ley.progressBar.value = "0"
 
-        debatingLeyContainter.appendChild(progressBar)
+        ley.debatingLeyContainter.appendChild(ley.progressBar)
 
-        this.debatingContainer.appendChild(debatingLeyContainter)
+        this.debatingContainer.appendChild(ley.debatingLeyContainter)
+
+        this.currentlyDebating.push(ley)
+    }
+
+    endDebate(selectedLey,verdict){
+        selectedLey.debated = true
+        console.log("ended debate, verdict:"+verdict)
+        selectedLey.debatingLeyContainter.style.backgroundColor = verdict? "green" : "red"
+        
+    }
+
+    update() {
+        super.update()
+        if(this.currentlyDebating.length > 0) {
+            for (let selectedLey of this.currentlyDebating) {
+                if(!selectedLey.debated){
+                    if(selectedLey.progressBar.value<100){
+                        selectedLey.progressBar.value = selectedLey.progressBar.value +0.1
+                    }
+                    else{
+                        let verdict = selectedLey.tendency >= 0? true : false
+                        this.endDebate(selectedLey,verdict)
+                    }
+                }
+            }
+        }
     }
 
 }
