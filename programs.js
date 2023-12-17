@@ -358,6 +358,8 @@ const notifSound = new Audio("assets/notification.mp3")
 
 function mainLoop() {
 
+    if(!animRunning){return}
+
     if (settings.gameloop) {
         for (let program of runningPrograms) {
             if (typeof program.update === 'function') {
@@ -378,7 +380,7 @@ function mainLoop() {
         }
     }
 
-    if (animRunning) { requestAnimationFrame(mainLoop); }
+    requestAnimationFrame(mainLoop);
 }
 
 function startLoop() {

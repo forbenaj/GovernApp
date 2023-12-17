@@ -4,6 +4,13 @@ body {
   font-family: "Comic Sans MS", "Comic Sans", cursive;
 }
 
+.startScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .icon {
   display: flex;
   flex-direction: column;
