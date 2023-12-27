@@ -1,35 +1,40 @@
+<!--
+    Bienvenido a GovernApp wacho! Con suerte arrancaste
+    por acá así que vamos a recorrer el código en órden
+    pa que se entienda.
+
+    Éste index.html sólo carga lo básico, jQuery (que me
+    parece que lo podemos sacar para simplificar, porque
+    casi no se usa), la hoja de estilo y los scripts
+    para iniciar la interfaz.
+
+    Arrancá por [startup.js]
+-->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="jquery-3.5.1.min.js"></script>
-    <script src="jquery-ui.min.js"></script>
-    <script src="jquery.ui.touch-punch.min.js"></script>
-    <link rel="stylesheet" href="jquery-ui.css">
-    <!-- <link rel="stylesheet" href="98.css"> -->
+    <script src="jquery/jquery-3.5.1.min.js"></script>
+    <script src="jquery/jquery-ui.min.js"></script>
+    <script src="jquery/jquery.ui.touch-punch.min.js"></script>
+    <link rel="stylesheet" href="jquery/jquery-ui.css">
     <link rel="stylesheet" href="style.css">
 
-    <script src="programs.js"></script>
+    <!-- Acá!!! -->
+    
+    <script src="system/startup.js"></script> 
+
+    <script src="system/desktop.js"></script>
+
+    <script src="main.js"></script>
+
     <title>WindOS</title>
 </head>
 
-<body onload="initialize()">
+<body onload="onStartup()">
 
-    <div id="Desktop">
-
-    </div>
-
-    <script src="icons.js"></script>
-    <script src="program-files/GovernApp.js"></script>
-    <script src="program-files/Chamber.js"></script>
-    <script src="program-files/Status.js"></script>
-    <script src="program-files/Console.js"></script>
-    <script src="program-files/Calculator.js"></script>
-    <script src="program-files/Notepad.js"></script>
-    <script src="program-files/Paint.js"></script>
-    <script src="program-files/Settings.js"></script>
 </body>
 
 </html>

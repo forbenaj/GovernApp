@@ -63,4 +63,4 @@ class Paint extends Program {
     }
 }
 
-programInstances["Paint"] = new Paint()
+programClasses["Paint"] = Paint

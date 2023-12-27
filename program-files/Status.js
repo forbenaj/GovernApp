@@ -88,4 +88,4 @@ class Status extends Program {
     }
 }
 
-programInstances["Status"] = new Status()
+programClasses["Status"] = Status

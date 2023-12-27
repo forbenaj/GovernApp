@@ -126,4 +126,4 @@ class Chamber extends Program {
 }
 
 
-programInstances["Chamber"] = new Chamber()
+programClasses["Chamber"] = Chamber

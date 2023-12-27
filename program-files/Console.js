@@ -28,4 +28,4 @@ class ConsoleProgram extends Program {
     }
 }
 
-programInstances["Console"] = new ConsoleProgram()
+programClasses["Console"] = ConsoleProgram

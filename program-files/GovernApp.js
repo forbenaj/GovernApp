@@ -11,6 +11,10 @@ class GovernApp extends Program {
         this.leyesContainer;
         this.counter = 0
         this.currentLeyes = []
+        
+        this.tickCounter = 0;
+
+        this.randomTick = 150+(Math.random()*500)
     }
 
     createWindow() {
@@ -61,7 +65,7 @@ class GovernApp extends Program {
     }
 
     appendLey() {
-      notifSound.play()
+      new Audio("assets/notification.mp3").play()
       console.log(leyes.length)
       if(leyes.length<=0){
         console.log("leyes var emptied")
@@ -104,6 +108,23 @@ class GovernApp extends Program {
         this.notif.className = "noNotif"
       }
     }
+    
+
+    update(){
+      super.update()
+      if(this.tickCounter>this.randomTick){
+        console.log("tick")
+        this.tickCounter = 0
+        this.randomTick = 50+(Math.random()*500)
+        if(this.currentLeyes.length < 8){
+            this.appendLey()
+            //programInstances["Chamber"].debateLey()
+        }
+        
+      }
+      this.tickCounter++
+      
+    }
 }
 
 class Ley {
@@ -115,6 +136,8 @@ class Ley {
         this.tendency = ley.tendency;
         this.focused = false;
         this.debated = false;
+
+        
     }
 
     create(leyesContainer) {
@@ -307,4 +330,4 @@ let leyesDefault = [
 
 let leyes = leyesDefault.slice()
 
-programInstances["GovernApp"] = new GovernApp()
+programClasses["GovernApp"] = GovernApp

@@ -36,4 +36,4 @@ class Notepad extends Program {
     }
 }
 
-programInstances["Notepad"] = new Notepad()
+programClasses["Notepad"] = Notepad

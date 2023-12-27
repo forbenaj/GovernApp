@@ -85,4 +85,4 @@ class Settings extends Program {
     }
 }
 
-programInstances["Settings"] = new Settings()
+programClasses["Settings"] = Settings

@@ -89,4 +89,4 @@ class Calculator extends Program {
   }
 }
 
-programInstances["Calculator"] = new Calculator()
+programClasses["Calculator"] = Calculator

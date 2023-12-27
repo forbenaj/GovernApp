@@ -354,7 +354,6 @@ var tickCounter = 0;
 
 var randomTick = 150+(Math.random()*800)
 
-const notifSound = new Audio("assets/notification.mp3")
 
 function mainLoop() {
 
