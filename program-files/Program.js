@@ -1,9 +1,11 @@
-/* Program.js es el primer script que se añade al html.
-Cada programa que instanciamos es una subclase de la clase Program.
-En ningún momento se crea una instancia de Program de forma directa.
+/* Un programa es enrealidad una subclase de la clase Program.
+Cuando se crea cualquier programa, se hace como una plantilla de éste.
+En ningún momento se debería crear una instancia de Program de forma directa.
 */
 
 class Program {
+
+    // C O N S T R U C T O R, acá se inicializa la clase.
     constructor() {
 
         this.name;
@@ -11,12 +13,24 @@ class Program {
                     se identifica al programa, no el "id" del elemento html.
                     Capaz hay que cambiarle el nombre para evitar confusión.*/
 
-        this.window // Contenedor principal
-        this.windowTop // Barra de arribita
-        this.windowContent // Contenido de la aplicación. Acá dentro va todo
+
+        // Partes de la ventana
+        this.window
+        /*__________________________________
+        |_____*/this.windowTop/*__________|x|
+        |                                   |
+        |                                   |
+        |                                   |
+        |*/       this.windowContent      /*|      <----- Se me hizo bonito
+        |                                   |
+        |                                   |
+        |                                   |
+        |___________________________________|
+        */
+        
+        // Posición de la ventana
         this.x = 500
         this.y = 500
-        this.visible;
 
         // Variables para el arrastre animado
         this.lastX = 0;
@@ -31,11 +45,12 @@ class Program {
         this.bounceFactor = settings.bounce_factor
     }
 
+    // E J E C U T A R
     run() {
         // Por ahora se pueden abrir los programas las veces que se quiera. Obviamente hay que sacarlo para algunas apps.
 
         /* Ésta función NO SIRVE para evitar que los programas se reabran.
-         Ésto es porque cada vez que se abre un programa se crea una nueva instancia
+         Ésto es porque ahora cada vez que se abre un programa se crea una nueva instancia
          (polémico) y ésta función sólo chequea si ya estaba abierta la MISMA instancia. Dsp corregiré*/
 
         let index = runningPrograms.indexOf(this);
@@ -55,45 +70,43 @@ class Program {
         No quiero quitarle al jugador la chance de abrir 700 paints si tiene ganas. */
     }
 
+    // C R E A R   V E N T A N A
     createWindow() {
 
         let randomPos = getRandomPosition() // Por ahora las ventanas aparecen en posición al azar
 
-        this.windowContent = document.createElement("div");
-        this.windowContent.className = "window-content";
+        
+        // Todo este quilombo crea la ventana en el HTML. Debería ser una función aparte.
 
-
-        // Create the main div element
+        // Crea la ventana principal
         this.window = document.createElement("div");
         this.window.id = this.name;
         this.window.className = "window";
+
+        // Setea el tamaño y la posición
         this.window.style.width = this.width + "px";
         this.window.style.height = this.height + "px";
         this.x = randomPos.x
         this.y = randomPos.y
         this.window.style.left = this.x + "px";
         this.window.style.top = this.y + "px";
-        /*this.window.style.top = this.top;
-        this.window.style.left = this.left;*/
-        this.window.style.zIndex = runningPrograms.length - 1
+        this.window.style.zIndex = runningPrograms.length - 1 // La posición de la ventana en Z depende de la posición de la instancia en la lista de runningPrograms
 
-        // Create the window-top div element
+
+        // Crea la barra superior
         this.windowTop = document.createElement("div");
         this.windowTop.className = "window-top";
-
 
         let titleContainer = document.createElement("div");
         let titleText = document.createElement("p")
         titleContainer.className = "title"
         titleText.innerHTML = this.name
-
         titleContainer.appendChild(titleText)
 
-
+        // Crea los botones de la barra superior
         let buttons = document.createElement("div")
         buttons.className = "buttons"
 
-        // Create three button elements and append them to the window-top div
         let greenButton = document.createElement("button");
         greenButton.className = "round green";
         buttons.appendChild(greenButton);
@@ -105,22 +118,28 @@ class Program {
         let redButton = document.createElement("button");
         redButton.className = "close round red";
         buttons.appendChild(redButton);
-        //redButton.addEventListener("click", () => {this.close()})
+        //redButton.addEventListener("click", () => {this.close()}) // Esto se puede usar en vez de jQuery
+
+        // Crea el contenido de la ventana
+        this.windowContent = document.createElement("div");
+        this.windowContent.className = "window-content";
+        // Cada programa se encarga de rellenarlo
+
+
+        // Adjuntación de elementos!!! Ver si se organiza de otra forma
 
         this.windowTop.append(titleContainer)
         this.windowTop.appendChild(buttons)
 
-        // Append the child elements to the main div
         this.window.appendChild(this.windowTop);
         this.window.appendChild(this.windowContent);
 
-        // Insert the main div into the body
         document.body.appendChild(this.window);
 
-        this.$jWindow = $(this.window);
+        this.$jWindow = $(this.window); // Puaj
 
         // Window resize
-        //this.$jWindow.resizable({ handles: "all", alsoresize: ".window-content" });
+        //this.$jWindow.resizable({ handles: "all", alsoresize: ".window-content" }); // Funca raro el resizable cuando tenemos el arrastre animado
 
         // Window close
         this.$jWindow.on("click", ".close:first", () => {
@@ -135,8 +154,9 @@ class Program {
 
     }
 
-
+    // T R A E R   A L   F R E N T E
     bringToTop() {
+
         runningPrograms.splice(this.window.style.zIndex, 1)
 
         runningPrograms.push(this)
@@ -151,6 +171,7 @@ class Program {
 
     }
 
+    // A R R A S T R E   A N I M A D O
     makeDraggable() {
 
         this.friction = settings.friction
@@ -167,22 +188,33 @@ class Program {
         //if (settings.gameloop) {
 
 
-            if (this.$jWindow.hasClass("ui-draggable")) {
+            if (this.$jWindow.hasClass("ui-draggable")) { // Antes tenia la opción de elegir entre arrastre normal y arrastre animado. La saqué para simplificar pero se puede agregar
                 // Destroy jQuery UI draggable instance
                 this.$jWindow.draggable("destroy");
             }
 
-            // Listen to mouse
-
             let isMouseDown = false;
 
+            
+            // Declara las funciones para cuando el mouse haga cosas
+
+            // Cuando se aprieta el click
             this.mousedownHandler = (e) => {
                 isMouseDown = true;
             }
 
+            // Cuando se mueve el mouse
             this.mousemoveHandler = (event) => {
                 if (isMouseDown) {
-                    event.preventDefault();
+                    event.preventDefault(); // Evita que pase lo predeterminado, como que se seleccione texto
+                    
+                    /* Lo único que hace esta función es medir más o menos la
+                        velocidad a la que se está moviendo el mouse, para después
+                        usarla para mover la ventana a la misma velocidad.
+                        Parece rebuscado, porque podría ponerse tipo windowPosition = mousePosition,
+                        pero hace falta hacerlo así para añadir fricción y rebote.
+                    */
+
                     this.startX = this.lastX;
                     this.startY = this.lastY;
                     this.endX = event.clientX
@@ -200,6 +232,7 @@ class Program {
                 }
             }
 
+            // Cuando se suelta el click
             this.mouseupHandler = () => {
                 if (isMouseDown) {
                     isMouseDown = false
@@ -224,22 +257,24 @@ class Program {
 
     }
 
+    // L O O P
     update() {
+        // Por ahora ésta función sólo maneja el arrastre animado
 
+        // Control de velocidad
         this.x += this.speedX
         this.y += this.speedY
 
         this.window.style.left = this.x + "px";
         this.window.style.top = this.y + "px";
 
-
-        // Get the dimensions of the viewport
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
 
         this.speedX *= this.friction
         this.speedY *= this.friction
 
+        // Control de rebote
         if (this.x < 0) {
             this.speedX = Math.abs(this.speedX) * this.bounceFactor;
             this.x = 0;
@@ -268,10 +303,11 @@ class Program {
 
     }
 
+    // C E R R A R   V E N T A N A
     close() {
         //console.log(`${this.name} program closed.`);
 
-        // Elimina los event listeners que añadimos para hacer que la ventana se mueva. No creo que haga falta pero por las dudas
+        // Elimina los event listeners que añadimos. No creo que haga falta pero por las dudas
         this.windowTop.removeEventListener("mousedown", this.mousedownHandler);
         document.removeEventListener("mousemove", this.mousemoveHandler);
         document.removeEventListener("mouseup", this.mouseupHandler);
@@ -288,3 +324,6 @@ class Program {
 }
 
 programClasses["Program"] = Program
+
+/* Ahora si a ver el jueguito la cdsm!!
+Deberías seguir con [GovernApp.js] */

@@ -38,7 +38,7 @@ body {
   color: #fff;
   /*font-family: monospace;*/
   padding: 5px;
-  background-image: url("images/renny/file.png");
+  background-image: url("assets/file.png");
   background-size: cover; /* This property will cover the entire div with the image */
   background-position: center; /* This property will center the image within the div */
 }

@@ -1,6 +1,8 @@
+/* La aplicación principal!*/
+
 class GovernApp extends Program {
     constructor() {
-        super()
+        super() // La palabra clave super() ejecuta la función correspondiente de la superclase
         this.name = "GovernApp"
         this.window;
         this.windowContent;
@@ -12,14 +14,17 @@ class GovernApp extends Program {
         this.counter = 0
         this.currentLeyes = []
         
+
+        // El tickCounter se rellena en el update hasta llegar al numero random
         this.tickCounter = 0;
 
-        this.randomTick = 150+(Math.random()*500)
+        // Genera un numero random entre   ↓         y        ↓
+        this.randomTick =                 150+(Math.random()*500)
     }
 
     createWindow() {
-        super.createWindow()
-        // Create the window-content div element
+        super.createWindow() // Ejecuta la función createWindow() de la superclase Program
+        // En este punto la estructura básica de la ventana ya está armada, con el windowContent vacío
 
         let titleContainer = document.createElement("div")
         titleContainer.className = "appTitleContainer"
@@ -28,10 +33,13 @@ class GovernApp extends Program {
         let title = document.createElement("h1")
         title.innerHTML = "GovernApp"
 
+        // Indicador de notificaciones
         this.notif = document.createElement("div")
+        // Si hay notificaciones, queda rojo
         if(this.currentLeyes.length > 0){
           this.notif.className = "notif"
         }
+        // Si no hay notificaciones, queda verde
         else{this.notif.className = "noNotif"}
         this.notif.innerHTML = this.currentLeyes.length
 
@@ -51,7 +59,7 @@ class GovernApp extends Program {
         this.window.style.top="10%";
         this.window.style.left="10%";
 
-
+        // Botón para generar leyes para probar
         let generadorDeLeyes = document.createElement("input")
         generadorDeLeyes.type = "button"
         generadorDeLeyes.value = "Generar (DEV)"
@@ -60,33 +68,49 @@ class GovernApp extends Program {
         this.windowContent.appendChild(generadorDeLeyes)
     }
 
-    run() {
+    run() {// Esta función no hace falta por ahora
         super.run();
     }
 
+    /* Ésta es la función que hace llegar las leyes al jugador.
+        Toma una copia de la lista de leyes para no modificar la lista original.
+        Va eligiendo leyes random de la lista y eliminándolas para que no se repitan.
+        Cuando se acaban las leyes de la lista, se recarga haciendo una copia de la original nuevamente
+        
+    */
     appendLey() {
-      new Audio("assets/notification.mp3").play()
-      console.log(leyes.length)
-      if(leyes.length<=0){
-        console.log("leyes var emptied")
-        leyes = leyesDefault.slice()
-      }
+      
+        // Crea y reproduce el sonido
+        new Audio("assets/notification.mp3").play()
+
+        // Si la lista está vacía, hace una copia nuevamente (la variable está más abajo, por fuera de la clase)
+        if(leyes.length<=0){
+            console.log("leyes var emptied")
+            leyes = leyesDefault.slice()
+        }
+      
+        // Agarra una ley random de la lista
         let randomLey = leyes[Math.floor(Math.random() * leyes.length)]
+
+        // Crea una nueva instancia de la clase Ley con la info sacada de la lista
         let ley = new Ley(randomLey)
 
-
+        // Pushea la instancia en la lista de leyes actualmente visibles
         this.currentLeyes.push(ley)
 
+        // Crea el html de la ley y lo adjunta al contenedor de leyes
         ley.create(this.leyesContainer)
 
-        //this.leyesContainer.scrollTop = this.leyesContainer.scrollHeight
-        
+        //this.leyesContainer.scrollTop = this.leyesContainer.scrollHeight // Escrolea al fondo cada vez que llega una nueva ley. Resultó molesto así que lo saqué
+
+        // Borra la ley de la lista de leyes
         const index = leyes.indexOf(randomLey);
         if (index !== -1) {
             leyes.splice(index, 1);
         }
-        
-      this.updateNotif()
+
+        // Actualiza la notificación
+        this.updateNotif()
 
 
     }

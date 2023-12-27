@@ -1,16 +1,13 @@
 /* STARTUP es el primer script que se ejecuta.
 Contiene las variables globales más importantes y
-las funciones que inicializan el resto de scripts.
-
-Seguramente escriba los comentarios de ideas acá y en main.js
-para no enquilombar todo el código.*/
+las funciones que inicializan el resto de scripts.*/
 
 
 // L I S T A  D E  P R O G R A M A S
 // A cada programa listado le corresponde un script en /program-files
 // Si se crea un nuevo programa, es necesario colocarlo en ésta lista
 var programList = [
-    "Program",
+    "Program", // Sacar de acá, sino se crea un ícono.
     "GovernApp",
     "Chamber",
     "Status",
@@ -26,10 +23,10 @@ var programClasses = {}
 var programInstances = {}
 /* Habíamos quedado en que cada programa se encargaba de crear su propia instancia de clase,
 cosa que hubiera una sola instancia por cada programa, pero me pareció que tenía más sentido
-crear cada instancias desde la función initProgram().
+crear cada instancia desde la función initProgram().
 
-Ahora que lo pienso capaz es al pedo, no hace falta tener dos listas. Algunas Apps, como GovernApp,
-NECESITAN ser persistentes para que no se borre la info cada vez que la cerras.
+Ahora que lo pienso capaz es al pedo, no hace falta tener dos listas.
+Algunas Apps, como GovernApp, NECESITAN ser persistentes para que no se borre la info cada vez que la cerras.
 De todas formas eso se puede manejar aparte, con alguna función para tener la app en segundo plano.*/
 
 
