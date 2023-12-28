@@ -7,7 +7,7 @@ class GovernApp extends Program {
         this.window;
         this.windowContent;
         this.width = "550";
-        this.height = "550"
+        this.height = "600"
         this.top = "50%";
         this.left = "50%";
         this.leyesContainer;

@@ -3,21 +3,11 @@ Contiene las variables globales más importantes y
 las funciones que inicializan el resto de scripts.*/
 
 
-// L I S T A   D E   P R O C E S O S,   S E R V I C I O S   Y   P R O G R A M A S
+// L I S T A   D E   P R O G R A M A S
 // Todos los scripts que van a adjuntarse en el documento
-// A cada programa listado le corresponde un script en /system o /program-files
+// A cada programa listado le corresponde un script en /program-files
 // Si se crea un nuevo programa, es necesario colocarlo en ésta lista
 var programFiles = [
-    {
-        name: "desktop",
-        type: "system",
-        src: "system/desktop.js"
-    },
-    {
-        name: "program",
-        type: "system",
-        src: "system/program.js"
-    },
     {
         name: "GovernApp",
         type: "app",

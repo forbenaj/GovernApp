@@ -7,7 +7,7 @@
 ██      ██   ██  ██████   ██████  ██   ██ ██   ██ ██      ██ 
                                                              
 Cada programa es enrealidad una subclase de la clase Program.
-Cuando se crea cualquier programa, se hace como una plantilla de éste.
+Cuando se crea cualquier programa, se hace como una extensión de éste.
 En ningún momento se debería crear una instancia de Program de forma directa.
 
 */
