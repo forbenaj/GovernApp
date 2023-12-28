@@ -3,27 +3,77 @@ Contiene las variables globales más importantes y
 las funciones que inicializan el resto de scripts.*/
 
 
-// L I S T A  D E  P R O G R A M A S
-// A cada programa listado le corresponde un script en /program-files
+// L I S T A   D E   P R O C E S O S,   S E R V I C I O S   Y   P R O G R A M A S
+// Todos los scripts que van a adjuntarse en el documento
+// A cada programa listado le corresponde un script en /system o /program-files
 // Si se crea un nuevo programa, es necesario colocarlo en ésta lista
-var programList = [
-    "Program", // Sacar de acá, sino se crea un ícono.
-    "GovernApp",
-    "Chamber",
-    "Status",
-    "Console",
-    "Calculator",
-    "Notepad",
-    "Paint",
-    "Settings"
+var programFiles = [
+    {
+        name: "desktop",
+        type: "system",
+        src: "system/desktop.js"
+    },
+    {
+        name: "program",
+        type: "system",
+        src: "system/program.js"
+    },
+    {
+        name: "GovernApp",
+        type: "app",
+        src: "program-files/GovernApp.js"
+    },
+    {
+        name: "Chamber",
+        type: "app",
+        src: "program-files/Chamber.js"
+    },
+    {
+        name: "Status",
+        type: "app",
+        src: "program-files/Status.js"
+    },
+    {
+        name: "Console",
+        type: "app",
+        src: "program-files/Console.js"
+    },
+    {
+        name: "Calculator",
+        type: "app",
+        src: "program-files/Calculator.js"
+    },
+    {
+        name: "Notepad",
+        type: "app",
+        src: "program-files/Notepad.js"
+    },
+    {
+        name: "Paint",
+        type: "app",
+        src: "program-files/Paint.js"
+    },
+    {
+        name: "Settings",
+        type: "app",
+        src: "program-files/Settings.js"
+    }
 ]
+
+var startPrograms = [
+        "GovernApp",
+        "Chamber",
+        "Status"
+    ]
+
+
 
 // Variables placeholder para poner las clases y las instancias.
 var programClasses = {}
 var programInstances = {}
-/* Habíamos quedado en que cada programa se encargaba de crear su propia instancia de clase,
-cosa que hubiera una sola instancia por cada programa, pero me pareció que tenía más sentido
-crear cada instancia desde la función initProgram().
+/* Habíamos quedado en que cada script se encargaba de crear su propia instancia de clase al momento de adjuntar,
+cosa que hubiera una sola instancia por cada programa, pero me pareció que tenía más sentido crear cada instancia
+desde la función initProgram().
 
 Ahora que lo pienso capaz es al pedo, no hace falta tener dos listas.
 Algunas Apps, como GovernApp, NECESITAN ser persistentes para que no se borre la info cada vez que la cerras.
@@ -39,19 +89,19 @@ var runningPrograms = []
 // La primera función que se ejecuta cuando el body is ready ( ͡° ͜ʖ ͡°)
 function onStartup() {
 
-    desktop = new Desktop()
 
     // Carga todos los scripts con una promesa. Una vez que todos carguen, se pueden ejecutar programas
-    Promise.all(programList.map(loadScript))
+    Promise.all(programFiles.map(loadScript))
         .then(() => {
 
+            // Acá adentro ya se puede ejecutar cualquier script adjuntado
             console.log("All scripts have been loaded!");
 
-            // Los programas que querramos iniciar automáticamente van acá
-            initProgram("GovernApp")
-            initProgram("Chamber")
-            initProgram("Status")
-            // Probablemente estaría bueno definir ésto en otro lado, como en la lista de programas o en cada programa
+            desktop = new Desktop()
+            
+            for(let programName of startPrograms) {
+                initProgram(programName)
+            }
             
         })
         .catch((error) => {
@@ -104,11 +154,11 @@ class startScreen {
 
 
 // La función que añade los scripts al html
-function loadScript(name) {
+function loadScript(program) {
 
     return new Promise((resolve, reject) => {
         let script = document.createElement("script")
-        script.src = "program-files/"+name+".js"
+        script.src = program.src
         script.onload = resolve;
         script.onerror = reject;
         document.head.appendChild(script)

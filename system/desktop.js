@@ -1,28 +1,40 @@
+/*
+██████  ███████ ███████ ██   ██ ████████  ██████  ██████  
+██   ██ ██      ██      ██  ██     ██    ██    ██ ██   ██ 
+██   ██ █████   ███████ █████      ██    ██    ██ ██████  
+██   ██ ██           ██ ██  ██     ██    ██    ██ ██      
+██████  ███████ ███████ ██   ██    ██     ██████  ██      
+                                                          
+                                                 
+*/
+
 class Desktop {
     constructor(){
 
         let desktop = document.createElement("div")
         desktop.id = "Desktop"
-        for (let programName of programList) {
+        for (let program of programFiles) {
     
-            let icon = document.createElement("div")
-            let image = document.createElement("div")
-            let text = document.createElement("div")
-            
-    
-            icon.ondblclick = () => initProgram(programName)
-            icon.id = "consoleIcon"
-            icon.className = "icon"
-    
-            image.className = "icon-image"
-    
-            text.className = "icon-text"
-            text.innerHTML = programName
-    
-            icon.appendChild(image)
-            icon.appendChild(text)
-    
-            desktop.appendChild(icon)
+            if(program.type == "app") {
+                let icon = document.createElement("div")
+                let image = document.createElement("div")
+                let text = document.createElement("div")
+                
+        
+                icon.ondblclick = () => initProgram(program.name)
+                icon.id = "consoleIcon"
+                icon.className = "icon"
+        
+                image.className = "icon-image"
+        
+                text.className = "icon-text"
+                text.innerHTML = program.name
+        
+                icon.appendChild(image)
+                icon.appendChild(text)
+        
+                desktop.appendChild(icon)
+            }
     
         }
         document.body.appendChild(desktop)

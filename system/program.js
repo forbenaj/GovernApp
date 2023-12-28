@@ -1,6 +1,15 @@
-/* Un programa es enrealidad una subclase de la clase Program.
+/*
+
+██████  ██████   ██████   ██████  ██████   █████  ███    ███ 
+██   ██ ██   ██ ██    ██ ██       ██   ██ ██   ██ ████  ████ 
+██████  ██████  ██    ██ ██   ███ ██████  ███████ ██ ████ ██ 
+██      ██   ██ ██    ██ ██    ██ ██   ██ ██   ██ ██  ██  ██ 
+██      ██   ██  ██████   ██████  ██   ██ ██   ██ ██      ██ 
+                                                             
+Cada programa es enrealidad una subclase de la clase Program.
 Cuando se crea cualquier programa, se hace como una plantilla de éste.
 En ningún momento se debería crear una instancia de Program de forma directa.
+
 */
 
 class Program {
