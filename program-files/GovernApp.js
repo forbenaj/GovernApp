@@ -1,4 +1,17 @@
-/* La aplicación principal!*/
+/* 
+
+ ██████╗  ██████╗ ██╗   ██╗███████╗██████╗ ███╗   ██╗ █████╗ ██████╗ ██████╗ 
+██╔════╝ ██╔═══██╗██║   ██║██╔════╝██╔══██╗████╗  ██║██╔══██╗██╔══██╗██╔══██╗
+██║  ███╗██║   ██║██║   ██║█████╗  ██████╔╝██╔██╗ ██║███████║██████╔╝██████╔╝
+██║   ██║██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗██║╚██╗██║██╔══██║██╔═══╝ ██╔═══╝ 
+╚██████╔╝╚██████╔╝ ╚████╔╝ ███████╗██║  ██║██║ ╚████║██║  ██║██║     ██║     
+ ╚═════╝  ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝     ╚═╝     
+                                                                             
+La aplicación principal!
+
+Como todos los programas, es una subclase de Program.
+
+*/
 
 class GovernApp extends Program {
     constructor() {
@@ -49,6 +62,7 @@ class GovernApp extends Program {
         let description = document.createElement("p")
         description.innerHTML = "Bienvenido al Sistema Único de Aprobación de Leyes y Estatutos! Por favor, revise las leyes pendientes sugeridas por los ciudadanos"
 
+        // Crea el contenedor de leyes, que es donde se reciben las leyes
         this.leyesContainer = document.createElement("div")
         this.leyesContainer.className = "listContainer"
 
@@ -72,13 +86,12 @@ class GovernApp extends Program {
         super.run();
     }
 
-    /* Ésta es la función que hace llegar las leyes al jugador.
-        Toma una copia de la lista de leyes para no modificar la lista original.
-        Va eligiendo leyes random de la lista y eliminándolas para que no se repitan.
-        Cuando se acaban las leyes de la lista, se recarga haciendo una copia de la original nuevamente
-        
-    */
     appendLey() {
+      
+      /* Ésta es la función que hace llegar las leyes al jugador.
+          Toma una copia de la lista de leyes para no modificar la lista original.
+          Va eligiendo leyes random de la lista y eliminándolas para que no se repitan.
+          Cuando se acaban las leyes de la lista, se recarga haciendo una copia de la original nuevamente*/
       
         // Crea y reproduce el sonido
         new Audio("assets/notification.mp3").play()
@@ -115,44 +128,50 @@ class GovernApp extends Program {
 
     }
 
+    // Función que elimina la ley de la lista de leyes, ya sea que se aprobó o desaprobó
     resolveLey(ley){
-      const index = this.currentLeyes.indexOf(ley);
-      if (index !== -1) {
-        this.currentLeyes.splice(index, 1);
-      }
-      this.updateNotif()
+        const index = this.currentLeyes.indexOf(ley);
+        if (index !== -1) {
+            this.currentLeyes.splice(index, 1);
+        }
+        this.updateNotif()
     }
 
+    // Actualiza el indicador de notificaciones
     updateNotif(){
-      this.notif.innerHTML = this.currentLeyes.length
-      if(this.currentLeyes.length > 0){
-        this.notif.className = "notif"
-      }
-      else{
-        this.notif.className = "noNotif"
-      }
+        this.notif.innerHTML = this.currentLeyes.length
+        if(this.currentLeyes.length > 0){
+            this.notif.className = "notif"
+        }
+        else{
+            this.notif.className = "noNotif"
+        }
     }
     
-
+    // Se añaden algunas cosas al loop del programa
     update(){
-      super.update()
-      if(this.tickCounter>this.randomTick){
-        console.log("tick")
-        this.tickCounter = 0
-        this.randomTick = 50+(Math.random()*500)
+        super.update()
+
+        // Adjunta una nueva ley cada vez que pasa el tiempo indicado, que es un número de ticks aleatorio entre 50 y 500 (1 seg a 10 seg aprox)
+        if(this.tickCounter>this.randomTick){
+            console.log("tick")
+            this.tickCounter = 0
+            this.randomTick = 50+(Math.random()*500)
         if(this.currentLeyes.length < 8){
             this.appendLey()
-            //programInstances["Chamber"].debateLey()
         }
         
-      }
-      this.tickCounter++
-      
+        }
+        this.tickCounter++
+        
     }
 }
 
+
+// Clase que maneja las leyes en sí.
 class Ley {
     constructor(ley) {
+        // Recibe un objeto con title, text, citizen y tendency.
         this.ley = ley;
         this.title = ley.title;
         this.text = ley.text;
@@ -165,6 +184,8 @@ class Ley {
     }
 
     create(leyesContainer) {
+        /* Función para crear el html de las leyes.
+        */
 
         this.leyContainer = document.createElement("div")
         this.leyContainer.className = "leyContainerUnfocused"
@@ -354,4 +375,6 @@ let leyesDefault = [
 
 let leyes = leyesDefault.slice()
 
+
+// Como todos los programas, guarda una referencia a su propia clase en programClasses
 programClasses["GovernApp"] = GovernApp

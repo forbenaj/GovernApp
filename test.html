@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Document</title>
+</head>
+<style>
+    
+.window {
+  display: flex;
+  flex-direction: column;
+  height:550px;
+  width:550px;
+  position: fixed;
+  border: solid 3px #000;
+}
+
+
+.window-top {
+  display: flex;
+  height: 20px;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.5);
+  color: #ddd;
+  background-color: #00d;
+  box-sizing: border-box;
+}
+
+
+.window-content {
+  display: flex;
+  flex-direction: column;
+  background: rgb(207, 203, 141);
+  color: #0f0f0f;
+  height: calc(100% - 20px); /* Subtract the height of window-top */
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+
+.myElement {
+  width: 100%;
+  height: 50px;
+  border: solid 1px #0f0f0f;
+  border-radius: 5px;
+  background-color: #dba7a7;
+  box-sizing: border-box;
+}
+
+.listContainer {
+  width: 100%;
+  height: 100%;
+  border: solid 1px #0f0f0f;
+  border-radius: 5px;
+  background-color: #fafafa;
+  box-sizing: border-box;
+}
+
+
+</style>
+<body>
+
+    <div class="window">
+        <div class="window-top"></div>
+        <div class="window-content">
+            <div class="myElement"></div>
+            <div class="listContainer"></div>
+        </div>
+    </div>
+    
+</body>
+</html>

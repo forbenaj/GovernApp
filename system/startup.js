@@ -1,3 +1,14 @@
+/*
+
+███████ ████████  █████  ██████  ████████ ██    ██ ██████  
+██         ██    ██   ██ ██   ██    ██    ██    ██ ██   ██ 
+███████    ██    ███████ ██████     ██    ██    ██ ██████  
+     ██    ██    ██   ██ ██   ██    ██    ██    ██ ██      
+███████    ██    ██   ██ ██   ██    ██     ██████  ██      
+                                                           
+*/                                                           
+
+
 /* STARTUP es el primer script que se ejecuta.
 Contiene las variables globales más importantes y
 las funciones que inicializan el resto de scripts.*/
@@ -50,6 +61,7 @@ var programFiles = [
     }
 ]
 
+// Acá se definen los programas que se inician automáticamente
 var startPrograms = [
         "GovernApp",
         "Chamber",
@@ -84,7 +96,9 @@ function onStartup() {
     Promise.all(programFiles.map(loadScript))
         .then(() => {
 
-            // Acá adentro ya se puede ejecutar cualquier script adjuntado
+            // Acá adentro ya se puede usar cualquier script adjuntado
+            // En éste punto, cada programa guardó una referencia a su propia clase en programClasses
+
             console.log("All scripts have been loaded!");
 
             desktop = new Desktop()
@@ -105,43 +119,18 @@ function onStartup() {
 // La función polémica. Instanciamos las clases acá? Se encarga cada programa? Cómo saberlo
 function initProgram(programName) {
 
-    // Crea una nueva instancia del programa y la aloja en programInstances
-    programInstances[programName] = new programClasses[programName]()
+    // Crea una nueva instancia del programa
+    let program = new programClasses[programName]()
+
+    // Aloja la instancia bajo el nombre del programa
+    programInstances[programName] = program
 
     // Ejecuta el programa
-    programInstances[programName].run()
+    program.run()
 
-    //runningPrograms.push(programInstance) // Por ahora lo maneja cada programa
+    //runningPrograms.push(programInstance) // Por ahora ésto lo maneja cada programa
 
 }
-
-// Generador de la ventana inicial (sin usar, no le des bola)
-class startScreen {
-    constructor(){
-        this.screenWidth = window.innerWidth;
-        this.screenHeight = window.innerHeight;
-
-        this.screen = document.createElement("div")
-        this.screen.className = "startScreen"
-        this.screen.style.width = this.screenWidth
-        this.screen.style.height = this.screenHeight
-
-        let startButton = document.createElement("input")
-        startButton.className = "startButton"
-        startButton.type = "button"
-        startButton.value = "START"
-        startButton.onclick = () => loadScript("programs.js")
-
-        this.screen.appendChild(startButton)
-
-        this.$jScreen = $(this.screen)
-
-    }
-    display() {
-        document.body.appendChild(this.screen)
-    }
-}
-
 
 // La función que añade los scripts al html
 function loadScript(program) {
@@ -155,8 +144,9 @@ function loadScript(program) {
     })
 }
 
-/* Con ésto ya arranca el escritorio con todos los íconos, se cargan
-los scripts de cada programa y se crean las instancias.
+/* Con ésto ya se adjuntaron los scripts de todos los programas,
+cada programa adjuntó su clase en programClasses,
+se inicializó el escritorio y se inicializaron los tres programas principales.
 
 Te recomiendo seguir con el [program-files/Program.js] para entender
 cómo funcionan los programas

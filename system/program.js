@@ -56,9 +56,9 @@ class Program {
 
     // E J E C U T A R
     run() {
-        // Por ahora se pueden abrir los programas las veces que se quiera. Obviamente hay que sacarlo para algunas apps.
+        // Por ahora se pueden abrir los programas las veces que se quiera. Obviamente hay que desactivarlo para algunas apps.
 
-        /* Ésta función NO SIRVE para evitar que los programas se reabran.
+        /* En éste momento ésta función NO SIRVE para evitar que los programas se reabran.
          Ésto es porque ahora cada vez que se abre un programa se crea una nueva instancia
          (polémico) y ésta función sólo chequea si ya estaba abierta la MISMA instancia. Dsp corregiré*/
 
@@ -84,9 +84,12 @@ class Program {
 
         let randomPos = getRandomPosition() // Por ahora las ventanas aparecen en posición al azar
 
-        
-        // Todo este quilombo crea la ventana en el HTML. Debería ser una función aparte.
 
+    /*----------------------------------------------------------------------------- 
+    |   Todo este quilombo crea la ventana en el HTML. Debería ser una función aparte.
+    |
+    |
+    */  
         // Crea la ventana principal
         this.window = document.createElement("div");
         this.window.id = this.name;
@@ -100,7 +103,6 @@ class Program {
         this.window.style.left = this.x + "px";
         this.window.style.top = this.y + "px";
         this.window.style.zIndex = runningPrograms.length - 1 // La posición de la ventana en Z depende de la posición de la instancia en la lista de runningPrograms
-
 
         // Crea la barra superior
         this.windowTop = document.createElement("div");
@@ -116,18 +118,18 @@ class Program {
         let buttons = document.createElement("div")
         buttons.className = "buttons"
 
-        let greenButton = document.createElement("button");
+        // Botones sin usar
+        /*let greenButton = document.createElement("button");
         greenButton.className = "round green";
         buttons.appendChild(greenButton);
 
         let yellowButton = document.createElement("button");
         yellowButton.className = "round yellow";
-        buttons.appendChild(yellowButton);
+        buttons.appendChild(yellowButton);*/
 
         let redButton = document.createElement("button");
         redButton.className = "close round red";
         buttons.appendChild(redButton);
-        //redButton.addEventListener("click", () => {this.close()}) // Esto se puede usar en vez de jQuery
 
         // Crea el contenido de la ventana
         this.windowContent = document.createElement("div");
@@ -145,6 +147,14 @@ class Program {
 
         document.body.appendChild(this.window);
 
+    /*
+    |   Fin de la creación de ventana
+    |
+    ----------------------------------------------------------------------------- */
+
+
+        // Acá empieza el jQuery, puaj
+
         this.$jWindow = $(this.window); // Puaj
 
         // Window resize
@@ -154,10 +164,12 @@ class Program {
         this.$jWindow.on("click", ".close:first", () => {
             this.close()
         });
+        //redButton.addEventListener("click", () => {this.close()}) // Esto se puede usar en vez de jQuery
 
         this.$jWindow.mousedown(() => {
             this.bringToTop();
         });
+
 
         this.makeDraggable();
 
@@ -189,18 +201,21 @@ class Program {
         this.speedX = 0;
         this.speedY = 0;
 
+        /* Antes había la opción de elegir arrastre normal con jQuery o arrastre animado.
+        Saqué el jQuery para simplificar pero se puede volver a agregar/*
+
         // Remove custom dragging logic if it was previously added
         /*this.windowTop.removeEventListener("mousedown", this.mousedownHandler);
         document.removeEventListener("mousemove", this.mousemoveHandler);
         document.removeEventListener("mouseup", this.mouseupHandler);*/
 
         //if (settings.gameloop) {
-
-
-            if (this.$jWindow.hasClass("ui-draggable")) { // Antes tenia la opción de elegir entre arrastre normal y arrastre animado. La saqué para simplificar pero se puede agregar
-                // Destroy jQuery UI draggable instance
+            /*if (this.$jWindow.hasClass("ui-draggable")) {
+                // Destroy jQuery UI draggable instance 
                 this.$jWindow.draggable("destroy");
-            }
+            }*/
+
+
 
             let isMouseDown = false;
 
@@ -331,8 +346,6 @@ class Program {
         }
     }
 }
-
-programClasses["Program"] = Program
 
 /* Ahora si a ver el jueguito la cdsm!!
 Deberías seguir con [GovernApp.js] */

@@ -5,17 +5,13 @@ class Status extends Program {
         this.window;
         this.windowContent;
         this.width = "350";
-        this.height = "100"
+        this.height = "108"
         this.top = "10%";
         this.left = "80%";
     }
 
     createWindow() {
         this.visible = true;
-
-        this.windowContent = document.createElement("div");
-        this.windowContent.className = "window-content";
-
 
         // Create the main div element
         this.window = document.createElement("div");
@@ -28,6 +24,10 @@ class Status extends Program {
         /*this.window.style.top = this.top;
         this.window.style.left = this.left;*/
         this.window.style.zIndex = runningPrograms.length - 1
+
+        this.windowContent = document.createElement("div");
+        this.windowContent.className = "window-content";
+
 
         // Create the window-top div element
         this.windowTop = document.createElement("div");
