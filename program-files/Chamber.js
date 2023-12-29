@@ -13,7 +13,6 @@ class Chamber extends Program {
 
     createWindow() {
         super.createWindow()
-        // Create the window-content div element
 
         let titleContainer = document.createElement("div")
         titleContainer.style.textAlign = "center"
@@ -31,13 +30,8 @@ class Chamber extends Program {
         let ctx = canvas.getContext("2d")
         chamberContainer.appendChild(canvas)
 
-        /*ctx.beginPath()
-        ctx.arc(60, 55, 50, 0, Math.PI, true)
-        ctx.closePath()
-        ctx.fillStyle = "red"
-        ctx.fill()*/
 
-
+        // Función mágica para generar la cámara
         let i = 1;
         let j = 0;
 
@@ -88,9 +82,6 @@ class Chamber extends Program {
         title.innerHTML = ley.title
 
         ley.debatingLeyContainter.appendChild(title)
-
-        
-        //ley.progressBar.value = "0"
 
         ley.debatingLeyContainter.appendChild(ley.progressBar)
 

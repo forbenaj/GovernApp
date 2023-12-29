@@ -10,6 +10,7 @@
 La aplicación principal!
 
 Como todos los programas, es una subclase de Program.
+La convención de nombres está horrible. Fue todo muy apurado.
 
 */
 
@@ -168,7 +169,7 @@ class GovernApp extends Program {
 }
 
 
-// Clase que maneja las leyes en sí.
+// Clase que maneja las leyes en sí. Capaz toda esta clase debería moverse a otro script, porque es bastante general
 class Ley {
     constructor(ley) {
         // Recibe un objeto con title, text, citizen y tendency.
@@ -246,7 +247,7 @@ class Ley {
 
         this.$jLey = $(this.leyContainer);
 
-        
+        // Ésta parte es para cuando se pone la ley en Chamber
         this.progressBar = document.createElement("progress")
         this.progressBar.max = "100"
         this.progressBar.value = "0"
@@ -292,6 +293,8 @@ class Ley {
 
 }
 
+
+// Lista de todas las leyes. Debería estar alojado en otro lado.
 let leyesDefault = [
     {
       "title": "mas viviendas para todes",
@@ -373,8 +376,11 @@ let leyesDefault = [
     }
   ]
 
+// Ésto crea una copia de la lista de leyes, para poder eliminar las leyes a medida que se van recibiendo
 let leyes = leyesDefault.slice()
 
 
 // Como todos los programas, guarda una referencia a su propia clase en programClasses
 programClasses["GovernApp"] = GovernApp
+
+/* Y prácticamente está todo! Solo faltaría revisar el [main.js] para ver cómo funciona el loop */
