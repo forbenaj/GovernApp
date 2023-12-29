@@ -31,7 +31,7 @@ function mainLoop() {
 
     if(!animRunning){return} // Antes de arrancar, chequea si está prendida la animación.
 
-    // Medio irrelevante que esté la variable "gameloop".
+    // Medio irrelevante que esté la variable "gameloop" si ya está "animRunning".
     // Básicamente, si está prendido el gameloop, los programas ejecutan su función update.
     if (settings.gameloop) {
         for (let program of runningPrograms) {

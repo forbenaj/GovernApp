@@ -25,7 +25,6 @@ class GovernApp extends Program {
         this.top = "50%";
         this.left = "50%";
         this.leyesContainer;
-        this.counter = 0
         this.currentLeyes = []
         
 
@@ -38,7 +37,9 @@ class GovernApp extends Program {
 
     createWindow() {
         super.createWindow() // Ejecuta la función createWindow() de la superclase Program
+
         // En este punto la estructura básica de la ventana ya está armada, con el windowContent vacío
+        // El resto de la función sólo añade los elementos dentro del windowContent
 
         let titleContainer = document.createElement("div")
         titleContainer.className = "appTitleContainer"

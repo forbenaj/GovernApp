@@ -97,12 +97,13 @@ function onStartup() {
         .then(() => {
 
             // Acá adentro ya se puede usar cualquier script adjuntado
-            // En éste punto, cada programa guardó una referencia a su propia clase en programClasses
+            // En éste punto, cada programa guardó una referencia a su propia clase en programClasses (lo hicieron en su propio script, lo vemos más adelante)
 
             console.log("All scripts have been loaded!");
 
-            desktop = new Desktop()
+            desktop = new Desktop() // Se crea una instancia de escritorio, y se adjunta solito al html
             
+            // Arranca los programas de inicio automático
             for(let programName of startPrograms) {
                 initProgram(programName)
             }
@@ -132,6 +133,7 @@ function initProgram(programName) {
 
 }
 
+
 // La función que añade los scripts al html
 function loadScript(program) {
 
@@ -144,8 +146,9 @@ function loadScript(program) {
     })
 }
 
+
 /* Con ésto ya se adjuntaron los scripts de todos los programas,
-cada programa adjuntó su clase en programClasses,
+cada programa alojó su clase en programClasses,
 se inicializó el escritorio y se inicializaron los tres programas principales.
 
 Te recomiendo seguir con el [program-files/Program.js] para entender

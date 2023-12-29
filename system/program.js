@@ -87,7 +87,7 @@ class Program {
 
     /*----------------------------------------------------------------------------- 
     |   Todo este quilombo crea la ventana en el HTML. Debería ser una función aparte.
-    |
+    |   No le des muchísima bola.
     |
     */  
         // Crea la ventana principal
@@ -178,10 +178,11 @@ class Program {
     // T R A E R   A L   F R E N T E
     bringToTop() {
 
+        // Elimina la instancia de la lista y la pushea de nuevo, cosa de que quede al final de la lista
         runningPrograms.splice(this.window.style.zIndex, 1)
-
         runningPrograms.push(this)
 
+        // Reordena los zIndex de la lista de programas
         for (let i = 0; i < runningPrograms.length; i++) {
             let program = runningPrograms[i];
             if (program.window) {
@@ -195,6 +196,8 @@ class Program {
     // A R R A S T R E   A N I M A D O
     makeDraggable() {
 
+        // Tampoco le des mucha bola, sólo añade el arrastre con fricción y reboteishon
+
         this.friction = settings.friction
         this.bounceFactor = settings.bounce_factor
 
@@ -204,7 +207,6 @@ class Program {
         /* Antes había la opción de elegir arrastre normal con jQuery o arrastre animado.
         Saqué el jQuery para simplificar pero se puede volver a agregar/*
 
-        // Remove custom dragging logic if it was previously added
         /*this.windowTop.removeEventListener("mousedown", this.mousedownHandler);
         document.removeEventListener("mousemove", this.mousemoveHandler);
         document.removeEventListener("mouseup", this.mouseupHandler);*/
@@ -283,7 +285,7 @@ class Program {
 
     // L O O P
     update() {
-        // Por ahora ésta función sólo maneja el arrastre animado
+        // Por ahora ésta función sólo maneja el arrastre animado. Tampoco hace falta darle mucha bola.
 
         // Control de velocidad
         this.x += this.speedX
