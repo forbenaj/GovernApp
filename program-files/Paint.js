@@ -63,4 +63,4 @@ class Paint extends Program {
     }
 }
 
-programClasses["Paint"] = Paint
+programManager.programClasses["Paint"] = Paint

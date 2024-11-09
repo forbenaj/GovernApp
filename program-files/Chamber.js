@@ -9,6 +9,8 @@ class Chamber extends Program {
         this.top = "50%";
         this.left = "80%";
         this.currentlyDebating = []
+
+        this.multiInstance = false
     }
 
     createWindow() {
@@ -117,4 +119,4 @@ class Chamber extends Program {
 }
 
 
-programClasses["Chamber"] = Chamber
+programManager.programClasses["Chamber"] = Chamber

@@ -8,6 +8,8 @@ class Status extends Program {
         this.height = "108"
         this.top = "10%";
         this.left = "80%";
+
+        this.multiInstance = false
     }
 
     createWindow() {
@@ -23,7 +25,7 @@ class Status extends Program {
         this.window.style.top = "20%";
         /*this.window.style.top = this.top;
         this.window.style.left = this.left;*/
-        this.window.style.zIndex = runningPrograms.length - 1
+        this.window.style.zIndex = programManager.windowsDisplaying.length - 1
 
         this.windowContent = document.createElement("div");
         this.windowContent.className = "window-content";
@@ -88,4 +90,4 @@ class Status extends Program {
     }
 }
 
-programClasses["Status"] = Status
+programManager.programClasses["Status"] = Status

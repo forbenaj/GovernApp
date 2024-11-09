@@ -85,4 +85,4 @@ class Settings extends Program {
     }
 }
 
-programClasses["Settings"] = Settings
+programManager.programClasses["Settings"] = Settings

@@ -33,6 +33,8 @@ class GovernApp extends Program {
 
         // Genera un numero random entre   ↓         y        ↓
         this.randomTick =                 150+(Math.random()*500)
+
+        this.multiInstance = false
     }
 
     createWindow() {
@@ -280,9 +282,9 @@ class Ley {
         console.log("Approved!")
         this.$jLey.remove()
 
-        programInstances["GovernApp"].resolveLey(this)
+        programManager.getRunningProgramsByName("GovernApp")[0].resolveLey(this)
 
-        programInstances["Chamber"].addLey(this)
+        programManager.getRunningProgramsByName("Chamber")[0].addLey(this)
     }
 
     discardLey() {
@@ -382,6 +384,6 @@ let leyes = leyesDefault.slice()
 
 
 // Como todos los programas, guarda una referencia a su propia clase en programClasses
-programClasses["GovernApp"] = GovernApp
+programManager.programClasses["GovernApp"] = GovernApp
 
 /* Y prácticamente está todo! Solo faltaría revisar el [main.js] para ver cómo funciona el loop */
