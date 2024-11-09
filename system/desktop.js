@@ -75,6 +75,28 @@ class Desktop {
             }
         });
 
+        this.taskbar
+        this.startScreen
+
+        this.createTaskbar()
+
+    }
+
+    createTaskbar() {
+        this.taskbar = document.createElement("div")
+        this.taskbar.id = "taskbar"
+        document.body.appendChild(this.taskbar)
+
+        let startButton = document.createElement("button")
+        startButton.id = "startButton"
+        startButton.className = "start-button"
+        startButton.innerHTML = "Start"
+        startButton.addEventListener("click", () => {
+            console.log("Start button clicked")
+        })
+
+        this.taskbar.appendChild(startButton)
+        
     }
     
     /*initialize() {

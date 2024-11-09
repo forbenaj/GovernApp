@@ -34,7 +34,7 @@ function mainLoop() {
     // Medio irrelevante que esté la variable "gameloop" si ya está "animRunning".
     // Básicamente, si está prendido el gameloop, los programas ejecutan su función update.
     if (settings.gameloop) {
-        for (let program of runningPrograms) {
+        for (let program of programManager.windowsDisplaying) {
             if (typeof program.update === 'function') {
                 program.update()
             }
@@ -67,12 +67,12 @@ var settings = {
 }
 
 // Función para tomar una posición random en la pantalla.
-function getRandomPosition(){
+function getRandomPosition(windowSize={x:0,y:0}) {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
 
-    const randomX = Math.floor(Math.random() * screenWidth);
-    const randomY = Math.floor(Math.random() * screenHeight);
+    const randomX = Math.floor(Math.random() * (screenWidth - windowSize.x));
+    const randomY = Math.floor(Math.random() * (screenHeight - windowSize.y));
 
     return {x:randomX,y:randomY}
 }

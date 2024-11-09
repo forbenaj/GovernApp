@@ -28,4 +28,4 @@ class ConsoleProgram extends Program {
     }
 }
 
-programClasses["Console"] = ConsoleProgram
+programManager.programClasses["Console"] = ConsoleProgram

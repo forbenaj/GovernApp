@@ -68,11 +68,9 @@ var startPrograms = [
         "Status"
     ]
 
-
+var desktop
 
 // Variables placeholder para poner las clases y las instancias.
-var programClasses = {}
-var programInstances = {}
 /* Habíamos quedado en que cada script se encargaba de crear su propia instancia de clase al momento de adjuntar,
 cosa que hubiera una sola instancia por cada programa, pero me pareció que tenía más sentido crear cada instancia
 desde la función initProgram().
@@ -81,9 +79,8 @@ Ahora que lo pienso capaz es al pedo, no hace falta tener dos listas.
 Algunas Apps, como GovernApp, NECESITAN ser persistentes para que no se borre la info cada vez que la cerras.
 De todas formas eso se puede manejar aparte, con alguna función para tener la app en segundo plano.*/
 
-
-// Lista de programas ejecutándose. Cada vez que se ejecuta un programa, se pushea la instancia acá
-var runningPrograms = []
+// 07/11/24 - Dejo todos estos comentarios para documentar
+var programManager = new ProgramManager()
 
 
 // ACÁ EMPIEZA TODO
@@ -121,10 +118,10 @@ function onStartup() {
 function initProgram(programName) {
 
     // Crea una nueva instancia del programa
-    let program = new programClasses[programName]()
+    let program = new programManager.programClasses[programName]()
 
     // Aloja la instancia bajo el nombre del programa
-    programInstances[programName] = program
+    //programInstances[programName] = program
 
     // Ejecuta el programa
     program.run()

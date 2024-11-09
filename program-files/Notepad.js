@@ -36,4 +36,4 @@ class Notepad extends Program {
     }
 }
 
-programClasses["Notepad"] = Notepad
+programManager.programClasses["Notepad"] = Notepad

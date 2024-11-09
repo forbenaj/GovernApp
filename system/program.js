@@ -18,9 +18,7 @@ class Program {
     constructor() {
 
         this.name;
-        this.id; /* En éste contexto, "id" es el número con el que
-                    se identifica al programa, no el "id" del elemento html.
-                    Capaz hay que cambiarle el nombre para evitar confusión.*/
+        this.processId;
 
 
         // Partes de la ventana
@@ -52,6 +50,10 @@ class Program {
         this.speedY = 0;
         this.friction = settings.friction
         this.bounceFactor = settings.bounce_factor
+
+        this.multiInstance = true // Define si el programa se puede abrir varias veces - 07/11/24
+        this.taskbarButton
+        this.maximized = false
     }
 
     // E J E C U T A R
@@ -62,27 +64,49 @@ class Program {
          Ésto es porque ahora cada vez que se abre un programa se crea una nueva instancia
          (polémico) y ésta función sólo chequea si ya estaba abierta la MISMA instancia. Dsp corregiré*/
 
-        let index = runningPrograms.indexOf(this);
-        if (index !== -1) {
-            console.log("Program already running. Showing...")
-        }
-        else {
+        //let index = runningPrograms.indexOf(this);
+        //if (index !== -1) {
+        //    console.log("Program already running. Showing...")
+        //}
+        //else {
             // Es decir, se va a ejecutar solamente ésta parte:
-            console.log(`Running ${this.name} program...`);
-            this.id = runningPrograms.length
-            runningPrograms.push(this)
-            this.createWindow()
-        }
+        //    console.log(`Running ${this.name} program...`);
+        //    this.id = runningPrograms.length
+        //    runningPrograms.push(this)
+        //    this.createWindow()
+        //}
 
         /* Creo que el default debería ser que se puedan abrir nuevamente (nueva instancia),
         pero que algunos programas, como GovernApp, Chamber, Status, lo tengan deshabilitado.
         No quiero quitarle al jugador la chance de abrir 700 paints si tiene ganas. */
+
+        // 07/11/24 - Dejo todos estos comentarios para documentar
+
+
+        // Check if the programInstances contain a dictionary with the name of the program
+        if (!this.multiInstance) {
+            let programs = programManager.getRunningProgramsByName(this.name)
+            if (programs.length > 0) {
+                console.log(`Program already running with name ${this.name}. Showing...`)
+                return
+            }
+        }
+
+        
+        this.processId = Object.keys(programManager.programInstances).length
+        console.log(`Running ${this.name} program with id ${this.processId}...`);
+        programManager.programInstances[this.processId] = this
+        programManager.windowsDisplaying.push(this)
+        this.createWindow()
+        this.createTaskbarButton()
+        this.bringToTop()
+        
     }
 
     // C R E A R   V E N T A N A
     createWindow() {
 
-        let randomPos = getRandomPosition() // Por ahora las ventanas aparecen en posición al azar
+        let randomPos = getRandomPosition({x:this.width,y:this.height}) // Por ahora las ventanas aparecen en posición al azar
 
 
     /*----------------------------------------------------------------------------- 
@@ -102,7 +126,7 @@ class Program {
         this.y = randomPos.y
         this.window.style.left = this.x + "px";
         this.window.style.top = this.y + "px";
-        this.window.style.zIndex = runningPrograms.length - 1 // La posición de la ventana en Z depende de la posición de la instancia en la lista de runningPrograms
+        this.window.style.zIndex = Object.keys(programManager.programInstances).length - 1 // La posición de la ventana en Z depende de la posición de la instancia en la lista de runningPrograms
 
         // Crea la barra superior
         this.windowTop = document.createElement("div");
@@ -118,18 +142,23 @@ class Program {
         let buttons = document.createElement("div")
         buttons.className = "buttons"
 
-        // Botones sin usar
-        /*let greenButton = document.createElement("button");
-        greenButton.className = "round green";
-        buttons.appendChild(greenButton);
+        let minimizeButton = document.createElement("button");
+        minimizeButton.className = "minimize";
+        minimizeButton.addEventListener("click", () => {
+            this.minimize()
+        })
+        buttons.appendChild(minimizeButton);
 
-        let yellowButton = document.createElement("button");
-        yellowButton.className = "round yellow";
-        buttons.appendChild(yellowButton);*/
+        let maximizeButton = document.createElement("button");
+        maximizeButton.className = "maximize";
+        maximizeButton.addEventListener("click", () => {
+            this.maximize()
+        })
+        buttons.appendChild(maximizeButton);
 
-        let redButton = document.createElement("button");
-        redButton.className = "close round red";
-        buttons.appendChild(redButton);
+        let closeButton = document.createElement("button");
+        closeButton.className = "close";
+        buttons.appendChild(closeButton);
 
         // Crea el contenido de la ventana
         this.windowContent = document.createElement("div");
@@ -175,22 +204,58 @@ class Program {
 
     }
 
+    createTaskbarButton() {
+        this.taskbarButton = document.createElement("button")
+        this.taskbarButton.id = this.name + "TaskbarButton"
+        this.taskbarButton.className = "taskbar-button"
+        this.taskbarButton.innerHTML = this.name
+        
+        this.taskbarButton.addEventListener("click", () => {
+            console.log("Taskbar button clicked")
+            this.toggleWindow()
+        })
+
+        desktop.taskbar.appendChild(this.taskbarButton)
+    }
+
     // T R A E R   A L   F R E N T E
     bringToTop() {
-
         // Elimina la instancia de la lista y la pushea de nuevo, cosa de que quede al final de la lista
-        runningPrograms.splice(this.window.style.zIndex, 1)
-        runningPrograms.push(this)
+        programManager.windowsDisplaying.splice(this.window.style.zIndex, 1)
+        programManager.windowsDisplaying.push(this)
 
         // Reordena los zIndex de la lista de programas
-        for (let i = 0; i < runningPrograms.length; i++) {
-            let program = runningPrograms[i];
+        for (let i = 0; i < programManager.windowsDisplaying.length; i++) {
+            let program = programManager.windowsDisplaying[i];
             if (program.window) {
                 program.window.style.zIndex = i
+                program.taskbarButton.classList.remove("selected")
             }
         }
+        this.window.classList.remove("minimized")
 
+        this.taskbarButton.classList.add("selected")
+    }
 
+    minimize() {
+        console.log("Minimizing...")
+        //programManager.windowsDisplaying.splice(this.window.style.zIndex, 1)
+        //programManager.windowsDisplaying.unshift(this)
+
+        //for (let i = 0; i < programManager.windowsDisplaying.length; i++) {
+        //    let program = programManager.windowsDisplaying[i];
+        //    if (program.window) {
+        //        program.window.style.zIndex = i
+        //    }
+        //}
+        this.window.classList.add("minimized")
+        //this.selected = true
+        this.taskbarButton.classList.remove("selected")
+    }
+
+    maximize() {
+        this.window.classList.toggle("maximized")
+        this.maximized = !this.maximized
     }
 
     // A R R A S T R E   A N I M A D O
@@ -288,45 +353,55 @@ class Program {
         // Por ahora ésta función sólo maneja el arrastre animado. Tampoco hace falta darle mucha bola.
 
         // Control de velocidad
-        this.x += this.speedX
-        this.y += this.speedY
+        if (!this.maximized) {
+            this.x += this.speedX
+            this.y += this.speedY
 
-        this.window.style.left = this.x + "px";
-        this.window.style.top = this.y + "px";
+            this.window.style.left = this.x + "px";
+            this.window.style.top = this.y + "px";
 
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
 
-        this.speedX *= this.friction
-        this.speedY *= this.friction
+            this.speedX *= this.friction
+            this.speedY *= this.friction
 
-        // Control de rebote
-        if (this.x < 0) {
-            this.speedX = Math.abs(this.speedX) * this.bounceFactor;
-            this.x = 0;
-            this.deltaX *= -1 * this.bounceFactor
+            // Control de rebote
+            if (this.x < 0) {
+                this.speedX = Math.abs(this.speedX) * this.bounceFactor;
+                this.x = 0;
+                this.deltaX *= -1 * this.bounceFactor
+            }
+            if (this.x > viewportWidth - this.width) {
+                this.speedX = -Math.abs(this.speedX) * this.bounceFactor;
+                this.x = viewportWidth - this.width;
+                this.deltaX *= -1 * this.bounceFactor
+            }
+
+            if (this.y < 0) {
+                this.speedY = Math.abs(this.speedY) * this.bounceFactor;
+                this.y = 0;
+                this.deltaY *= -1 * this.bounceFactor
+            }
+            if (this.y > viewportHeight - this.height) {
+                this.speedY = -Math.abs(this.speedY) * this.bounceFactor;
+                this.y = viewportHeight - this.height;
+                this.deltaY *= -1 * this.bounceFactor
+            }
+
+            this.width = this.window.offsetWidth
+            this.height = this.window.offsetHeight
         }
-        if (this.x > viewportWidth - this.width) {
-            this.speedX = -Math.abs(this.speedX) * this.bounceFactor;
-            this.x = viewportWidth - this.width;
-            this.deltaX *= -1 * this.bounceFactor
+
+    }
+
+    toggleWindow() {
+        if (this.window.classList.contains("minimized") || this.window.style.zIndex != programManager.windowsDisplaying.length - 1) {
+            this.bringToTop()
         }
-
-        if (this.y < 0) {
-            this.speedY = Math.abs(this.speedY) * this.bounceFactor;
-            this.y = 0;
-            this.deltaY *= -1 * this.bounceFactor
+        else {
+            this.minimize()
         }
-        if (this.y > viewportHeight - this.height) {
-            this.speedY = -Math.abs(this.speedY) * this.bounceFactor;
-            this.y = viewportHeight - this.height;
-            this.deltaY *= -1 * this.bounceFactor
-        }
-
-        this.width = this.window.offsetWidth
-        this.height = this.window.offsetHeight
-
-
     }
 
     // C E R R A R   V E N T A N A
@@ -342,10 +417,13 @@ class Program {
         this.window.remove()
 
         // Elimina el programa de la lista de programas ejecutándose
-        const index = runningPrograms.indexOf(this);
-        if (index !== -1) {
-            runningPrograms.splice(index, 1);
+        const indexProgram = programManager.windowsDisplaying.indexOf(this);
+        if (indexProgram !== -1) {
+            programManager.windowsDisplaying.splice(indexProgram, 1);
         }
+
+        // Elimina el botón de la barra de tareas
+        desktop.taskbar.removeChild(this.taskbarButton)
     }
 }
 
